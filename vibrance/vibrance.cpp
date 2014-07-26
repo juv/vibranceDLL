@@ -206,9 +206,7 @@ namespace vibranceDLL
 	int vibrance::getAssociatedNvidiaDisplayHandle(const char *szDisplayName, int length)
 	{
 		int outputId = 0; 
-
-		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_GetAssociatedNvidiaDisplayHandle)("\\\\.\\DISPLAY2", &outputId);
-
+		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_GetAssociatedNvidiaDisplayHandle)(szDisplayName, &outputId);
 		if(status == 0)
 		{
 			return outputId;
