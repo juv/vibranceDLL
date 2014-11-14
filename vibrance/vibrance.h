@@ -79,10 +79,10 @@ namespace vibranceDLL
 		NV_DECLARE_HANDLE(NvDisplayHandle);
 
 		bool initializeLibrary();
-		int getActiveOutputs(int *gpuHandles[]);
+		int getActiveOutputs(int *gpuHandles[], int *outputIds[]);
 		bool getInterfaceVersionString(char* szVersion);
 		void enumeratePhsyicalGPUs(int *gpuHandles[]);
-		int enumerateNvidiaDisplayHandle();
+		int enumerateNvidiaDisplayHandle(int index);
 		bool getDVCInfo(NV_DISPLAY_DVC_INFO *info, int defaultHandle);
 		bool getGpuName(int *gpuHandles[], char* szName);
 		bool isCsgoStarted(HWND *hwnd);

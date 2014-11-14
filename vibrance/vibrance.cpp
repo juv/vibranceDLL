@@ -146,13 +146,13 @@ namespace vibranceDLL
 		return true;
 	}
 
-	int vibrance::enumerateNvidiaDisplayHandle()
+	int vibrance::enumerateNvidiaDisplayHandle(int index)
 	{
 		int defaultHandle = 0;
-		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_EnumNvidiaDisplayHandle)(0, &defaultHandle);
-		if(status != 0)
+		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_EnumNvidiaDisplayHandle)(index, &defaultHandle);
+		if(status != 0 && status == NVAPI_END_ENUMERATION)
 		{
-			return 0;
+			return -1;
 		}
 		return defaultHandle;
 	}
@@ -192,15 +192,17 @@ namespace vibranceDLL
 		return true;
 	}
 
-	int vibrance::getActiveOutputs(int *gpuHandles[])
+	int vibrance::getActiveOutputs(int *gpuHandles[], int *outputIds[])
 	{
-		int outputId = 0; 
-		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_GPU_GetActiveOutputs)(gpuHandles[0], &outputId);
-		if(status != 0)
+		for(int i = 0; i < sizeof(gpuHandles)/sizeof(gpuHandles[0]); i++)
 		{
-			return status;
+			_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_GPU_GetActiveOutputs)(gpuHandles[0], outputIds[i]);
+			if(status != 0)
+			{
+				return status;
+			}
 		}
-		return outputId;
+		return *outputIds[0];
 	}
 
 	int vibrance::getAssociatedNvidiaDisplayHandle(const char *szDisplayName, int length)
