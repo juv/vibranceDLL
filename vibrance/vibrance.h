@@ -96,7 +96,7 @@ namespace vibranceDLL
 		bool getDVCInfo(NV_DISPLAY_DVC_INFO *info, int defaultHandle);
 		bool getGpuName(int *gpuHandles[], char* szName);
 		bool isCsgoStarted(HWND *hwnd);
-		bool isCsgoActive(HWND *hwnd);
+		bool isWindowActive(HWND *hwnd);
 		bool setDVCLevel(int defaultHandle, int level);
 		bool equalsDVCLevel(int defaultHandle, int level);
 		void handleDVC();

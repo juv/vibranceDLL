@@ -41,7 +41,7 @@ namespace vibranceDLL
 			HWND hwnd = NULL;
 			if(isCsgoStarted(&hwnd) && hwnd != NULL)
 			{
-				if(isCsgoActive(&hwnd))
+				if(isWindowActive(&hwnd))
 				{
 					int nLen = GetWindowTextLength(hwnd);
 					if(nLen > 0)
@@ -96,7 +96,7 @@ namespace vibranceDLL
 		return true;
 	}
 
-	bool vibrance::isCsgoActive(HWND *hwnd)
+	bool vibrance::isWindowActive(HWND *hwnd)
 	{
 		HWND activeWindow = GetForegroundWindow();
 		if(activeWindow == NULL)
