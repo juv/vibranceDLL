@@ -2,11 +2,11 @@ namespace vibranceDLL
 {
 	class __declspec(dllexport) vibrance
 	{
-#define NVAPI_MAX_PHYSICAL_GPUS		64
-#define NVAPI_MAX_USAGES_PER_GPU	34
-#define NVAPI_MAX_LEVEL				63
-#define NVAPI_DEFAULT_LEVEL			0
 
+	#define NVAPI_MAX_PHYSICAL_GPUS		64
+	#define NVAPI_MAX_USAGES_PER_GPU	34
+	#define NVAPI_MAX_LEVEL				63
+	#define NVAPI_DEFAULT_LEVEL			0
 
 	public:
 		typedef struct
@@ -25,6 +25,14 @@ namespace vibranceDLL
 			char	szBuildBranchString[64]; 
 			char	szAdapterString[64];
 		} NV_DISPLAY_DRIVER_VERSION;
+
+		typedef enum
+		{
+			NV_SYSTEM_TYPE_UNKNOWN = 0,
+			NV_SYSTEM_TYPE_LAPTOP = 1,
+			NV_SYSTEM_TYPE_DESKTOP = 2,
+
+		} NV_SYSTEM_TYPE;
 
 		enum _NvAPI_Status { 
 			NVAPI_OK = 0, NVAPI_ERROR = -1, NVAPI_LIBRARY_NOT_FOUND = -2, NVAPI_NO_IMPLEMENTATION = -3, 
@@ -74,6 +82,8 @@ namespace vibranceDLL
 		typedef int (*NvAPI_GetErrorMessage_t)(_NvAPI_Status nr,char szDesc[64]);
 		typedef int (*NvAPI_GetDVCInfoEx_t)(int hNvDisplay, int outputId, NV_DISPLAY_DVC_INFO *pDVCInfo);
 		typedef int (*NvAPI_GetAssociatedNvidiaDisplayHandle_t)(const char *szDisplayName, int *pNvDispHandle);
+		typedef int (*NvAPI_GPU_GetSystemType_t)(int *hPhysicalGpu, NV_SYSTEM_TYPE *pSystemType);
+
 
 #define NV_DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
 		NV_DECLARE_HANDLE(NvDisplayHandle);
@@ -93,5 +103,6 @@ namespace vibranceDLL
 		void printError(_NvAPI_Status status);
 		bool unloadLibrary();
 		int getAssociatedNvidiaDisplayHandle(const char *szDisplayName, int length);
+		int getGpuSystemType(int *gpuHandle);
 	};
 }

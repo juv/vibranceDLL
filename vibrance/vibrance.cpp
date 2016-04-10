@@ -21,6 +21,7 @@ namespace vibranceDLL
 	vibrance::NvAPI_GetInterfaceVersionString_t			NvAPI_GetInterfaceVersionString = NULL;
 	vibrance::NvAPI_GetErrorMessage_t					NvAPI_GetErrorMessage = NULL;
 	vibrance::NvAPI_GetAssociatedNvidiaDisplayHandle_t	NvAPI_GetAssociatedNvidiaDisplayHandle = NULL;
+	vibrance::NvAPI_GPU_GetSystemType_t					NvAPI_GPU_GetSystemType = NULL;
 
 	bool shouldRun;
 	int defaultHandle;
@@ -205,6 +206,17 @@ namespace vibranceDLL
 		return *outputIds[0];
 	}
 
+	int vibrance::getGpuSystemType(int *gpuHandle)
+	{
+		NV_SYSTEM_TYPE nvSystemType;
+		_NvAPI_Status status = (_NvAPI_Status)(*NvAPI_GPU_GetSystemType)(gpuHandle, &nvSystemType);
+		if (status == 0)
+		{
+			return nvSystemType;
+		}
+		return NV_SYSTEM_TYPE::NV_SYSTEM_TYPE_UNKNOWN;
+	}
+
 	int vibrance::getAssociatedNvidiaDisplayHandle(const char *szDisplayName, int length)
 	{
 		int outputId = 0; 
@@ -215,7 +227,6 @@ namespace vibranceDLL
 		}
 		return -1;
 	}
-
 
 	bool vibrance::unloadLibrary()
 	{	
@@ -247,13 +258,14 @@ namespace vibranceDLL
 		NvAPI_GetErrorMessage = (NvAPI_GetErrorMessage_t) (*NvAPI_QueryInterface)(0x6C2D048C);
 		NvAPI_GetDVCInfoEx = (NvAPI_GetDVCInfoEx_t) (*NvAPI_QueryInterface)(0x0E45002D);
 		NvAPI_GetAssociatedNvidiaDisplayHandle = (NvAPI_GetAssociatedNvidiaDisplayHandle_t) (*NvAPI_QueryInterface)(0x35C29134);
-
+		NvAPI_GPU_GetSystemType = (NvAPI_GPU_GetSystemType_t) (*NvAPI_QueryInterface)(0xBAAABFCC);
 
 		if (NvAPI_Initialize == NULL || NvAPI_Unload == NULL ||
 			NvAPI_EnumPhysicalGPUs == NULL ||NvAPI_GPU_GetFullName == NULL ||
 			NvAPI_GPU_GetActiveOutputs == NULL || NvAPI_GetDVCInfo == NULL || 
 			NvAPI_SetDVCLevel == NULL || NvAPI_EnumNvidiaDisplayHandle == NULL || 
-			NvAPI_GetInterfaceVersionString == NULL || NvAPI_GetErrorMessage == NULL || NvAPI_GetDVCInfoEx == NULL)
+			NvAPI_GetInterfaceVersionString == NULL || NvAPI_GetErrorMessage == NULL || 
+			NvAPI_GetDVCInfoEx == NULL || NvAPI_GPU_GetSystemType == NULL)
 		{
 			return false;
 		}
